@@ -23,6 +23,16 @@ function getRestaurantById(restaurantId) {
     });
 }
 
+function deleteRestaurantById(restaurantId) {
+    $.ajax({
+        url: `http://localhost:3000/api/restaurants/${restaurantId}`,
+        type: 'DELETE',
+        success: function(rest) {
+            deleteRestaurant(rest);
+        }
+    });
+}
+
 function showRestaurant(rest) {
     $("#restaurant-result").empty();
 
@@ -33,6 +43,14 @@ function showRestaurant(rest) {
         'Latitude: ' + rest.location[0].lat + '<br>' +
         'Stars: ' + rest.stars + '<br>' +
         '<p>'
+    );
+}
+
+function deleteRestaurant(rest) {
+    $("#restaurant-result").empty();
+
+    $("#restaurant-result").append(
+        '<p>Name: ' + rest.name + ' was succesfully deleted <p>'
     );
 }
 
@@ -51,8 +69,8 @@ function restaurantOperationsListeners() {
     });
 
     $("#delete-button").click(() => {
-        $("#get-delete-restaurant").css("display", "none");
-        alert("Delete");
+        $("#get-delete-restaurant").css("display", "block");
+        $("#get-delete-do").text("Delete");
     });
 
     $("#add-button").click(() => {
@@ -68,9 +86,13 @@ function restaurantOperationsListeners() {
     $("#get-delete-do").click(() => {
         if ($("#get-delete-do").text() === "Get") {
             const restaurantId = $("#rest-id").val();
-
             getRestaurantById(restaurantId);
-        } else {
+        }
+        else if ($("#get-delete-do").text() === "Delete") {
+            const restaurantId = $("#rest-id").val();
+            deleteRestaurantById(restaurantId);
+        } 
+        else {
             // Delete
         }
     });
